@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GraniVivi | Brand & Art Direction</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FUENTES: Lora (Serif) y Montserrat (Sans) - SOLO ESTAS DOS -->
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-brown': '#3c1c10',    /* Marrone Caldo */
+                        'brand-green': '#006633',    /* Verde Naturale */
+                        'brand-beige': '#f3ede4',    /* Beige Naturale */
+                        'brand-olive': '#67763f',    /* Verde Chiaro */
+                        'brand-rust': '#b35238',     /* Marrone Caldo II */
+                        'brand-gold': '#D4AF37',     /* Dorado */
+                        'brand-dark': '#1A1A1A',
+                    },
+                    fontFamily: {
+                        serif: ['"Lora"', 'serif'],
+                        sans: ['"Montserrat"', 'sans-serif'],
+                    },
+                    letterSpacing: {
+                        'brand-wide': '0.2em',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #f3ede4;
+            color: #3c1c10;
+            overflow-x: hidden;
+            /* Textura de grano sutil para dar calidez */
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+        }
+
+        /* CLASES PARA ANIMACIÓN AL SCROLL (Scroll Reveal) */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s cubic-bezier(0.5, 0, 0, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Delays para elementos en grupo */
+        .delay-100 { transition-delay: 0.1s; }
+        .delay-200 { transition-delay: 0.2s; }
+        .delay-300 { transition-delay: 0.3s; }
+        .delay-400 { transition-delay: 0.4s; }
+        .delay-500 { transition-delay: 0.5s; }
+        .delay-600 { transition-delay: 0.6s; }
+
+        .parallax-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            transition: transform 0.1s linear;
+        }
+
+        .floating-element {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.5;
+        }
+
+        .color-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(60, 28, 16, 0.1);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            background: white;
+        }
+        .color-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(60, 28, 16, 0.15);
+        }
+
+        h1, h2, h3, h4 { font-family: 'Lora', serif; }
+        
+        p, li, a, button, span, div { 
+            font-family: 'Montserrat', sans-serif; 
+        }
+
+        .tight-leading {
+            line-height: 1.6; 
+        }
+
+        .serif-text { font-family: 'Lora', serif; }
+
+        .nav-link { position: relative; color: #3c1c10; font-weight: 500; cursor: pointer; white-space: nowrap; }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: #b35238; /* Rust color for underline */
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after { width: 100%; }
+        .nav-link:hover { color: #b35238; }
+
+        /* Efecto Parallax en imagen de fondo (CAMPO DE TRIGO) */
+        .parallax-bg {
+            /* Nueva imagen de campo de trigo */
+            background-image: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1200&auto=format&fit=crop');
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        /* Overlay oscuro para leer texto */
+        .parallax-bg::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(47, 79, 47, 0.4); 
+        }
+
+        /* Estilo para el sabor activo */
+        .flavor-item.active {
+            background-color: rgba(60, 28, 16, 0.05); /* brand-brown con opacidad */
+            border-left: 4px solid;
+        }
+
+        /* Estilo para el precio tachado */
+        .price-strike {
+            position: relative;
+            display: inline-block;
+        }
+        .price-strike::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: -5%;
+            width: 110%;
+            height: 2px;
+            background: #b35238;
+            transform: rotate(-10deg);
+        }
+
+        html { scroll-behavior: smooth; }
+        ::selection { background-color: #b35238; color: #f3ede4; }
+    </style>
+</head>
+<body class="selection:bg-brand-rust selection:text-brand-beige">
+
+    <!-- NAV -->
+    <nav class="fixed w-full z-50 bg-[#f3ede4]/90 backdrop-blur-md border-b border-brand-brown/10 transition-all duration-300 shadow-sm" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            
+            <!-- LOGOTIPO -->
+            <a href="#" class="block hover:opacity-80 transition-opacity">
+                <!-- RECREACIÓN EN CÓDIGO (ACTIVA) -->
+                <svg width="200" height="40" viewBox="0 0 200 40" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Granivivi Logo">
+                    <text x="0" y="30" font-family="'Lora', serif" font-weight="400" font-size="32" fill="#3c1c10" letter-spacing="0.02em">
+                        GRANĪVIVI
+                    </text>
+                </svg>
+                <!-- TU IMAGEN REAL (DESCOMENTAR PARA USAR) -->
+                <!-- <img src="logo.png" alt="Granivivi Logo" style="height: 40px; width: auto;"> -->
+            </a>
+            
+            <div class="hidden md:flex space-x-8 text-sm uppercase tracking-widest text-brand-brown">
+                <a href="#brand" class="nav-link" data-key="nav_brand">Il Brand</a>
+                <a href="#products" class="nav-link" data-key="nav_products">Prodotti</a>
+                <a href="#promo" class="nav-link text-brand-rust font-bold" data-key="nav_offer">Offerta</a>
+                <a href="#art-direction" class="nav-link" data-key="nav_art">Art Direction</a>
+            </div>
+
+            <button onclick="toggleLanguage()" class="border border-brand-brown text-brand-brown px-4 py-1 rounded-full text-xs font-bold hover:bg-brand-brown hover:text-brand-beige transition-colors uppercase tracking-widest shadow-sm">
+                <span id="lang-display">ES</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- HERO INTERACTIVO MEJORADO Y CORPORATIVO -->
+    <header class="relative h-screen flex items-center justify-center overflow-hidden" id="hero">
+        
+        <!-- Imagen de fondo trigo sutil -->
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1600&auto=format&fit=crop" class="w-full h-full object-cover opacity-80" alt="Campo di grano">
+            <div class="absolute inset-0 bg-[#f3ede4]/40 mix-blend-overlay"></div>
+            <!-- Overlay degradado para asegurar lectura -->
+            <div class="absolute inset-0 bg-gradient-to-b from-[#f3ede4]/90 via-transparent to-[#f3ede4]/20"></div>
+        </div>
+
+        <!-- Elementos decorativos flotantes (Parallax) - LIMPIO SIN GLOBO -->
+        <div class="absolute inset-0 z-0" id="scene">
+            <div class="parallax-layer" data-speed="2">
+                <div class="floating-element w-96 h-96 bg-brand-olive/10 top-[-10%] left-[-10%] blur-3xl rounded-full"></div>
+            </div>
+            <div class="parallax-layer" data-speed="-2">
+                <div class="floating-element w-[500px] h-[500px] bg-brand-rust/5 bottom-[-20%] right-[-10%] blur-3xl rounded-full"></div>
+            </div>
+        </div>
+
+        <!-- Tarjeta Hero Central (Estilo Editorial) -->
+        <div class="relative z-10 text-center px-6 reveal active max-w-3xl mx-auto">
+            
+            <div class="bg-white/40 backdrop-blur-md border border-white/50 p-12 md:p-16 rounded-sm shadow-2xl relative">
+                <!-- Marco fino decorativo -->
+                <div class="absolute inset-2 border border-brand-brown/10 pointer-events-none"></div>
+
+                <div class="inline-block border-b border-brand-rust pb-1 mb-8">
+                     <p class="text-brand-rust uppercase tracking-brand-wide text-[10px] font-bold" data-key="hero_subtitle">100% ITALIANO</p>
+                </div>
+               
+                <!-- CLAIM PRINCIPAL EN MONTSERRAT REGULAR (CORPORATIVA) -->
+                <h1 class="text-4xl md:text-6xl text-brand-green mb-8 leading-tight">
+                    <span class="block font-sans font-normal tracking-wide" data-key="hero_claim">
+                        Il tuo momento, nutriente.
+                    </span>
+                </h1>
+
+                <!-- TEXTO ACTUALIZADO: MONTSERRAT MEDIUM Y SIN TRANSPARENCIA -->
+                <p class="max-w-lg mx-auto text-brand-brown font-medium text-lg leading-relaxed mb-10" data-key="hero_desc">
+                    Una pausa senza colpa. La fusione perfetta tra il piacere che desideri e l'equilibrio di cui hai bisogno.
+                </p>
+                
+                <!-- BOTÓN DE DESCARGA -->
+                <a href="MANUALE DI MARCA GRANI VIVI.APS.pdf" download class="group inline-flex items-center justify-center gap-3 px-8 py-3 bg-brand-brown text-brand-beige overflow-hidden transition-all hover:bg-brand-green shadow-lg">
+                    <span class="uppercase tracking-widest text-xs font-bold" data-key="cta_discover">Scopri il Manuale</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 group-hover:translate-y-1 transition-transform">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+        
+        <div class="absolute bottom-10 animate-bounce text-brand-brown/50">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+        </div>
+    </header>
+
+    <!-- SECTION 1: MANUAL DE MARCA (REESTRUCTURADO) -->
+    <section id="brand" class="py-24 px-6 md:px-12 max-w-7xl mx-auto">
+        <div class="flex flex-col gap-24">
+            
+            <!-- INTRO: ARQUETIPO -->
+            <div class="flex justify-center reveal">
+                <div class="relative bg-white p-10 shadow-2xl rotate-1 hover:rotate-0 transition-all duration-700 ease-out border border-brand-brown/5 max-w-2xl text-center group">
+                    <div class="absolute top-4 right-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                         <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor" class="text-brand-rust"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+                    </div>
+                    <h3 class="text-brand-green text-sm tracking-[0.2em] uppercase mb-4">Archetipo</h3>
+                    <div class="w-16 h-1 bg-brand-rust mb-6 mx-auto"></div>
+                    <h4 class="text-3xl font-serif italic text-brand-brown mb-6" data-key="brand_archetype_title">Il Saggio Sereno</h4>
+                    <p class="text-sm text-gray-600 leading-relaxed" data-key="brand_archetype_desc">
+                        Comunica con calma, autorevolezza e conoscenza. Risolve il conflitto tra piacere e salute offrendo una verità equilibrata.
+                    </p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
+                <!-- 01. IL LOGOTIPO -->
+                <div class="reveal delay-100">
+                    <span class="text-brand-rust text-xs font-bold tracking-widest uppercase mb-4 block flex items-center gap-2">
+                        <span class="w-8 h-px bg-brand-rust"></span>
+                        01. Il Logotipo
+                    </span>
+                    
+                    <div class="text-brand-brown/80 mb-8 font-light text-base text-left tight-leading border-l-4 border-brand-olive pl-6 space-y-4">
+                        <p data-key="brand_logo_text_1">
+                            Il logotipo GRANIVIVI è costruito a partire dalla tipografia Lora, scelta per il suo carattere elegante, equilibrato e contemporaneo, capace di esprimere i valori di qualità, naturalità e affidabilità del marchio. Le lettere sono state adattate e armonizzate per creare un insieme coerente e riconoscibile, mantenendo una forte leggibilità in tutti i contesti di utilizzo digitale.
+                        </p>
+                        <p data-key="brand_logo_text_2">
+                            Il claim “il tuo momento nutriente” utilizza la tipografia Montserrat, selezionata per il suo stile pulito e moderno, che dialoga in modo complementare con il logotipo principale e ne rafforza la chiarezza comunicativa.
+                        </p>
+                        <div>
+                            <p class="font-bold text-brand-brown mb-1" data-key="brand_logo_subtitle">Variazione della lettera “I” e sviluppo dell’isotipo</p>
+                            <p data-key="brand_logo_text_3">
+                                Un ruolo centrale nel sistema visivo è affidato alla lettera “I” del logotipo, reinterpretata come elemento distintivo dell’identità del marchio. A partire dalla sua forma nasce l’isotipo, ottenuto integrando un segno grafico organico rappresentato da foglie, simbolo di naturalità, nutrimento e vitalità. Questa trasformazione consente di creare un legame diretto tra il linguaggio tipografico del logotipo e l’identità simbolica del marchio. L’isotipo mantiene una relazione proporzionale e formale con il logotipo, garantendo coerenza visiva e permettendone l’utilizzo sia in combinazione con il logotipo, sia come elemento autonomo nelle applicazioni di dimensioni ridotte.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- PLACEHOLDER IMAGEN LOGO -->
+                    <div class="w-full bg-white p-8 border border-brand-brown/10 shadow-sm flex items-center justify-center relative">
+                        <img src="logo_sistema.jpg" onerror="this.src='https://via.placeholder.com/600x300.png?text=Carica+logo_sistema.jpg'" alt="Sistema Logotipo GraniVivi" class="max-h-40 w-auto">
+                        <div class="absolute bottom-2 right-2 text-[9px] text-gray-400">logo_sistema.jpg</div>
+                    </div>
+                </div>
+
+                <!-- 02. I COLORI -->
+                <div class="reveal delay-200">
+                    <span class="text-brand-rust text-xs font-bold tracking-widest uppercase mb-4 block flex items-center gap-2">
+                        <span class="w-8 h-px bg-brand-rust"></span>
+                        02. I Colori
+                    </span>
+                    <h2 class="text-4xl text-brand-green mb-6 font-serif" data-key="brand_color_title">Sistema Cromatico</h2>
+                    <p class="text-brand-brown/80 mb-8 font-light text-base text-left tight-leading border-l-4 border-brand-olive pl-6" data-key="brand_color_text">
+                        I colori dell’identità visiva di GRANIVIVI sono parte integrante del linguaggio del marchio e contribuiscono a definirne il carattere, la riconoscibilità e il tono comunicativo. La palette cromatica è stata selezionata per esprimere valori di naturalità, equilibrio e autenticità, garantendo al tempo stesso una corretta applicazione nei diversi contesti digitali.
+                    </p>
+                    
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-8">
+                        <div class="color-card rounded-lg overflow-hidden group cursor-pointer">
+                            <div class="h-16 w-full bg-[#3c1c10] shrink-0 group-hover:scale-105 transition-transform duration-500"></div>
+                            <div class="bg-white p-3 text-[10px] text-center uppercase font-bold tracking-wider text-brand-brown h-full flex items-center justify-center">Marrone<br>#3c1c10</div>
+                        </div>
+                        <div class="color-card rounded-lg overflow-hidden group cursor-pointer">
+                            <div class="h-16 w-full bg-[#006633] shrink-0 group-hover:scale-105 transition-transform duration-500"></div>
+                            <div class="bg-white p-3 text-[10px] text-center uppercase font-bold tracking-wider text-brand-brown h-full flex items-center justify-center">Verde N.<br>#006633</div>
+                        </div>
+                        <div class="color-card rounded-lg overflow-hidden group cursor-pointer">
+                            <div class="h-16 w-full bg-[#f3ede4] border-b border-gray-100 shrink-0 group-hover:scale-105 transition-transform duration-500"></div>
+                            <div class="bg-white p-3 text-[10px] text-center uppercase font-bold tracking-wider text-brand-brown h-full flex items-center justify-center">Beige<br>#f3ede4</div>
+                        </div>
+                        <div class="color-card rounded-lg overflow-hidden group cursor-pointer">
+                            <div class="h-16 w-full bg-[#67763f] shrink-0 group-hover:scale-105 transition-transform duration-500"></div>
+                            <div class="bg-white p-3 text-[10px] text-center uppercase font-bold tracking-wider text-brand-brown h-full flex items-center justify-center">V. Chiaro<br>#67763f</div>
+                        </div>
+                        <div class="color-card rounded-lg overflow-hidden group cursor-pointer">
+                            <div class="h-16 w-full bg-[#b35238] shrink-0 group-hover:scale-105 transition-transform duration-500"></div>
+                            <div class="bg-white p-3 text-[10px] text-center uppercase font-bold tracking-wider text-brand-brown h-full flex items-center justify-center">Marrone II<br>#b35238</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 03. TIPOGRAFIA -->
+            <div class="reveal delay-300 border-t border-brand-brown/10 pt-16 mt-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
+                     <div>
+                        <span class="text-brand-rust text-xs font-bold tracking-widest uppercase mb-4 block flex items-center gap-2">
+                            <span class="w-8 h-px bg-brand-rust"></span>
+                            03. Tipografia
+                        </span>
+                        <h2 class="text-4xl text-brand-green mb-6 font-serif" data-key="brand_typo_title">Sistema Tipografico</h2>
+                        
+                        <div class="mb-8">
+                            <h4 class="font-serif text-2xl text-brand-brown mb-2">Lora · Regular</h4>
+                            <p class="text-brand-brown/70 text-sm leading-relaxed" data-key="brand_typo_lora">
+                                La tipografia Lora Regular è utilizzata per il logotipo GRANIVIVI. Caratterizzata da uno stile elegante e strutturato, Lora conferisce al marchio un tono autorevole e autentico, in linea con i valori di qualità e naturalità. Il suo utilizzo è riservato al logotipo e ad applicazioni istituzionali selezionate.
+                            </p>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-sans text-2xl text-brand-brown mb-2 font-medium">Montserrat · Regular</h4>
+                            <p class="text-brand-brown/70 text-sm leading-relaxed" data-key="brand_typo_mont">
+                                La tipografia Montserrat Regular è utilizzata per il claim “il tuo momento nutriente”. Dal carattere pulito e contemporaneo, Montserrat garantisce chiarezza e leggibilità, creando un dialogo equilibrato con la tipografia principale del logotipo.
+                            </p>
+                        </div>
+                     </div>
+                     
+                     <!-- EJEMPLOS VISUALES TIPOGRAFIA (CORREGIDO) -->
+                     <div class="bg-white p-10 shadow-lg border border-brand-brown/5 flex flex-col justify-center gap-8">
+                         <div class="border-b border-brand-brown/10 pb-4">
+                             <p class="font-serif text-4xl text-brand-brown font-normal">Lora Regular</p>
+                         </div>
+                         <div class="border-b border-brand-brown/10 pb-4">
+                             <p class="font-serif text-4xl text-brand-brown font-bold">Lora Bold</p>
+                         </div>
+                         <div class="border-b border-brand-brown/10 pb-4">
+                             <p class="font-sans text-4xl text-brand-brown font-light">Montserrat Light</p>
+                         </div>
+                         <div class="border-b border-brand-brown/10 pb-4">
+                             <p class="font-sans text-4xl text-brand-brown font-normal">Montserrat Regular</p>
+                         </div>
+                         <div>
+                             <p class="font-sans text-4xl text-brand-brown font-medium">Montserrat Medium</p>
+                         </div>
+                     </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- BANNER PARALLAX -->
+    <div class="parallax-bg reveal">
+        <div class="relative z-10 text-center px-6 max-w-4xl">
+            <p class="font-serif text-3xl md:text-5xl italic leading-relaxed text-[#f3ede4] drop-shadow-lg" data-key="quote_brand">
+                "Perché nutrirsi bene non dovrebbe significare rinunciare al gusto, né godere dovrebbe implicare colpa."
+            </p>
+            <div class="mt-8">
+                <span class="inline-block w-24 h-1 bg-brand-gold bg-[#d4af37]"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECCIÓN DE PRODUCTO -->
+    <section id="products" class="bg-white py-24 px-6 md:px-12 reveal">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row gap-16 items-center">
+                
+                <!-- Packaging: IMAGEN CAMBIANTE -->
+                <div class="w-full md:w-1/2 flex justify-center reveal delay-100">
+                    <div class="relative group">
+                        <div class="absolute -top-10 -left-10 w-64 h-64 bg-brand-beige rounded-full mix-blend-multiply filter blur-2xl opacity-70 animate-pulse"></div>
+                        <div class="absolute -bottom-10 -right-10 w-64 h-64 bg-brand-olive/20 rounded-full mix-blend-multiply filter blur-2xl opacity-70"></div>
+                        
+                        <img id="product-display" 
+                             src="packaging_all.jpg" 
+                             onerror="this.src='https://via.placeholder.com/600x800.png?text=packaging_all.jpg'"
+                             alt="GraniVivi Packaging" 
+                             class="relative z-10 w-full max-w-md h-auto object-cover rounded-xl shadow-2xl transition-all duration-500 hover:scale-105"
+                             style="aspect-ratio: 4/5;">
+                        
+                        <div class="absolute bottom-4 left-0 right-0 text-center bg-white/80 p-2 text-[10px] text-brand-brown z-30">
+                            Nombres requeridos: packaging_all.jpg, packaging_spinaci.jpg, packaging_cacao.jpg, packaging_zucca.jpg
+                        </div>
+
+                        <div class="absolute top-4 right-4 z-20 bg-brand-rust text-white w-20 h-20 rounded-full flex items-center justify-center shadow-lg transform rotate-12 group-hover:rotate-0 transition-all border-2 border-white">
+                            <p class="text-[10px] font-bold text-center leading-tight">100%<br>GRANO<br>ITALIANO</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Info Productos -->
+                <div class="w-full md:w-1/2 reveal delay-200">
+                    <span class="text-brand-green text-xs font-bold tracking-widest uppercase mb-2 block">La Collezione</span>
+                    <h2 class="text-5xl text-brand-brown mb-6 leading-none" data-key="product_title">I Nostri Snack</h2>
+                    <p class="text-brand-brown/70 text-lg mb-6 leading-relaxed" data-key="product_desc">
+                        Croccanti, leggeri e prodotti con antichi grani lombardi. Un ritorno alle origini in ogni morso.
+                    </p>
+                    
+                    <div class="mb-8 flex items-baseline gap-2 border-b border-brand-brown/10 pb-4">
+                        <span class="text-2xl font-bold text-brand-brown">6,90€</span>
+                        <span class="text-sm text-brand-brown/50">/ 120g</span>
+                    </div>
+
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                        <div class="text-center p-3 bg-brand-beige/50 rounded-lg">
+                            <p class="font-serif text-xl font-bold text-brand-brown">10</p>
+                            <p class="text-[10px] uppercase text-brand-brown/60">kcal</p>
+                        </div>
+                        <div class="text-center p-3 bg-brand-beige/50 rounded-lg">
+                            <p class="font-serif text-xl font-bold text-brand-brown">120</p>
+                            <p class="text-[10px] uppercase text-brand-brown/60" data-key="feat_cereals">Cereali</p>
+                        </div>
+                        <div class="text-center p-3 bg-brand-beige/50 rounded-lg">
+                            <p class="font-serif text-xl font-bold text-brand-brown">100%</p>
+                            <p class="text-[10px] uppercase text-brand-brown/60">Italiano</p>
+                        </div>
+                        <div class="text-center p-3 bg-brand-beige/50 rounded-lg">
+                            <p class="font-serif text-xl font-bold text-brand-brown">♻</p>
+                            <p class="text-[10px] uppercase text-brand-brown/60" data-key="feat_sustain">Sostenibile</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6">
+                        <!-- Sabores -->
+                        <div class="flavor-item flex items-start gap-4 p-4 rounded-lg hover:bg-brand-beige/50 transition-all cursor-pointer group border-l-4 border-transparent" onclick="changeProduct('spinaci', this)">
+                            <div class="w-12 h-12 rounded-full bg-brand-green/10 flex items-center justify-center text-brand-green font-serif italic text-xl group-hover:bg-brand-green group-hover:text-brand-beige transition-colors">1</div>
+                            <div>
+                                <h4 class="text-xl font-bold text-brand-green" data-key="flavor_1_title">Spinaci</h4>
+                                <p class="text-sm text-brand-brown/60" data-key="flavor_1_desc">Grano antico e spinaci freschi. Un tocco di verde naturale.</p>
+                            </div>
+                        </div>
+                        <div class="flavor-item flex items-start gap-4 p-4 rounded-lg hover:bg-brand-beige/50 transition-all cursor-pointer group border-l-4 border-transparent" onclick="changeProduct('cacao', this)">
+                            <div class="w-12 h-12 rounded-full bg-brand-brown/10 flex items-center justify-center text-brand-brown font-serif italic text-xl group-hover:bg-brand-brown group-hover:text-brand-beige transition-colors">2</div>
+                            <div>
+                                <h4 class="text-xl font-bold text-brand-brown" data-key="flavor_2_title">Cacao</h4>
+                                <p class="text-sm text-brand-brown/60" data-key="flavor_2_desc">Il tocco dolce-amaro del cacao puro. Energia autentica.</p>
+                            </div>
+                        </div>
+                        <div class="flavor-item flex items-start gap-4 p-4 rounded-lg hover:bg-brand-beige/50 transition-all cursor-pointer group border-l-4 border-transparent" onclick="changeProduct('zucca', this)">
+                            <div class="w-12 h-12 rounded-full bg-brand-rust/20 flex items-center justify-center text-brand-rust font-serif italic text-xl group-hover:bg-brand-rust group-hover:text-white transition-colors">3</div>
+                            <div>
+                                <h4 class="text-xl font-bold text-brand-rust" data-key="flavor_3_title">Zucca</h4>
+                                <p class="text-sm text-brand-brown/60" data-key="flavor_3_desc">La dolcezza naturale della zucca mantovana.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button onclick="changeProduct('all', null)" class="mt-4 text-xs text-brand-brown/50 underline hover:text-brand-brown">Mostra tutti i packaging (Reset)</button>
+                    <div class="mt-8 pt-6 border-t border-brand-brown/10">
+                        <a href="#" class="text-sm text-brand-brown/70 hover:text-brand-green transition-colors font-medium border-b border-brand-brown/20 pb-1 hover:border-brand-green" data-key="cert_link">Vedi simboli e certificazioni</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN: PACK BENVENUTO (Con fondo trigo NUEVO) -->
+    <section id="promo" class="relative text-white py-24 px-6 reveal overflow-hidden">
+        <!-- Fondo con campo de trigo (IMAGEN NUEVA: Trigo y Espigas en primer plano) -->
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1501430654243-c934cec2e1c0?q=80&w=1600&auto=format&fit=crop" class="w-full h-full object-cover opacity-60 mix-blend-multiply" alt="Campo di grano con espigas primer plano">
+            <div class="absolute inset-0 bg-gradient-to-r from-brand-brown/95 via-brand-brown/80 to-transparent"></div>
+        </div>
+
+        <div class="max-w-6xl mx-auto relative z-10">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-12 bg-white/5 backdrop-blur-md rounded-3xl p-8 md:p-12 border border-white/10 shadow-2xl">
+                <div class="md:w-3/5">
+                    <div class="flex items-center gap-3 mb-6">
+                        <span class="bg-brand-gold text-brand-brown text-xs font-bold uppercase tracking-widest px-3 py-1 rounded shadow-md" data-key="promo_badge">Pack Benvenuto</span>
+                        <div class="h-px flex-1 bg-white/20"></div>
+                    </div>
+                    <h2 class="text-4xl md:text-5xl font-serif mb-6 leading-tight"><span data-key="promo_title">Il Trio del Benessere</span></h2>
+                    <p class="text-brand-beige/90 text-lg mb-8 leading-relaxed font-light" data-key="promo_desc">Non sai quale scegliere? Prova tutta la collezione. Spinaci, Cacao e Zucca in un unico pack per un'esperienza di gusto completa e nutriente.</p>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="flex items-center gap-3"><div class="w-6 h-6 rounded-full bg-brand-green flex items-center justify-center text-[10px]">✓</div><span class="text-sm font-medium">3 x 120g Packs</span></div>
+                        <div class="flex items-center gap-3"><div class="w-6 h-6 rounded-full bg-brand-green flex items-center justify-center text-[10px]">✓</div><span class="text-sm font-medium" data-key="promo_shipping">Spedizione Gratuita</span></div>
+                    </div>
+                </div>
+                <div class="md:w-2/5 w-full">
+                    <div class="bg-[#f9f7f2] text-brand-brown p-8 rounded-2xl shadow-xl text-center relative overflow-hidden transform hover:scale-105 transition-transform duration-300">
+                        <div class="absolute -top-10 -right-10 w-24 h-24 bg-brand-rust rotate-45"></div>
+                        <div class="absolute top-2 right-2 text-white text-[10px] font-bold z-10">-20%</div>
+                        <p class="uppercase text-xs tracking-widest mb-4 opacity-60" data-key="promo_label_price">Prezzo Totale</p>
+                        <div class="flex flex-col items-center justify-center mb-6">
+                            <span class="text-xl text-red-400 price-strike font-serif">20,70€</span>
+                            <span class="text-6xl font-bold font-serif text-brand-green">19,90€</span>
+                        </div>
+                        <button class="w-full bg-brand-brown hover:bg-brand-rust text-brand-beige font-bold py-4 px-6 rounded-xl transition-all duration-300 shadow-md" data-key="promo_cta">Acquista il Pack</button>
+                        <p class="text-[9px] text-gray-400 mt-4 uppercase tracking-wider" data-key="promo_disclaimer">*Offerta limitata</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3: ART DIRECTION & INSTAGRAM -->
+    <section id="art-direction" class="py-24 px-6 md:px-12 max-w-7xl mx-auto">
+        <div class="mb-20 text-center reveal">
+            <span class="text-brand-rust text-xs font-bold tracking-widest uppercase mb-4 block">02. Art Direction</span>
+            <h2 class="text-5xl text-brand-green" data-key="art_title">Il Progetto Artistico</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
+            <!-- Cards de Estrategia -->
+            <div class="reveal delay-100 bg-white rounded-lg shadow-lg overflow-hidden group hover:-translate-y-2 transition-all">
+                <div class="h-48 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1545205597-3d9d02c29597?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Target">
+                </div>
+                <div class="p-8 border-t-4 border-brand-olive">
+                    <div class="text-4xl text-brand-olive mb-4 font-serif opacity-50">01</div>
+                    <h3 class="text-xl font-bold mb-2 uppercase tracking-wide text-brand-brown" data-key="card_target_title">Target</h3>
+                    <p class="text-brand-brown/70 text-sm leading-relaxed" data-key="card_target_desc">Gli "Equilibrati Consapevoli".</p>
+                </div>
+            </div>
+            <!-- Card 2: Visual Mood (ESPIGAS DE TRIGO - CORREGIDO CON NUEVA URL) -->
+            <div class="reveal delay-200 bg-white rounded-lg shadow-lg overflow-hidden group hover:-translate-y-2 transition-all">
+                <div class="h-48 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Espigas Trigo Mood">
+                </div>
+                <div class="p-8 border-t-4 border-brand-rust">
+                    <div class="text-4xl text-brand-rust mb-4 font-serif opacity-50">02</div>
+                    <h3 class="text-xl font-bold mb-2 uppercase tracking-wide text-brand-brown" data-key="card_mood_title">Visual Mood</h3>
+                    <p class="text-brand-brown/70 text-sm leading-relaxed" data-key="card_mood_desc">Fotografia macro, luce naturale.</p>
+                </div>
+            </div>
+            <div class="reveal delay-300 bg-white rounded-lg shadow-lg overflow-hidden group hover:-translate-y-2 transition-all">
+                <div class="h-48 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Social">
+                </div>
+                <div class="p-8 border-t-4 border-brand-green">
+                    <div class="text-4xl text-brand-green mb-4 font-serif opacity-50">03</div>
+                    <h3 class="text-xl font-bold mb-2 uppercase tracking-wide text-brand-brown" data-key="card_social_title">Social</h3>
+                    <p class="text-brand-brown/70 text-sm leading-relaxed" data-key="card_social_desc">Collaborazioni con micro-influencer.</p>
+                </div>
+            </div>
+            <!-- Nueva Card 04 -->
+            <div class="reveal delay-400 bg-white rounded-lg shadow-lg overflow-hidden group hover:-translate-y-2 transition-all">
+                <div class="h-48 overflow-hidden">
+                     <img src="https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Tono di Voce">
+                </div>
+                <div class="p-8 border-t-4 border-brand-gold">
+                    <div class="text-4xl text-brand-gold mb-4 font-serif opacity-50">04</div>
+                    <h3 class="text-xl font-bold mb-2 uppercase tracking-wide text-brand-brown" data-key="card_tone_title">Tono di Voce</h3>
+                    <p class="text-brand-brown/70 text-sm leading-relaxed" data-key="card_tone_desc">Calmo, genuino ed evocativo.</p>
+                </div>
+            </div>
+             <!-- Nueva Card 05: Forme (COCINA CON MESA DE MADERA - IMAGEN NUEVA Y ESTABLE) -->
+             <div class="reveal delay-500 bg-white rounded-lg shadow-lg overflow-hidden group hover:-translate-y-2 transition-all">
+                <div class="h-48 overflow-hidden">
+                     <img src="https://images.unsplash.com/photo-1556909212-d5b604dba8c9?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Forme Cocina Madera">
+                </div>
+                <div class="p-8 border-t-4 border-brand-brown">
+                    <div class="text-4xl text-brand-brown mb-4 font-serif opacity-50">05</div>
+                    <h3 class="text-xl font-bold mb-2 uppercase tracking-wide text-brand-brown" data-key="card_shapes_title">Forme</h3>
+                    <p class="text-brand-brown/70 text-sm leading-relaxed" data-key="card_shapes_desc">Organiche e pulite.</p>
+                </div>
+            </div>
+            <!-- Nueva Card 06: Palette di Colori (TEXTURA NATURAL - IMAGEN NUEVA Y ESTABLE) -->
+            <div class="reveal delay-600 bg-white rounded-lg shadow-lg overflow-hidden group hover:-translate-y-2 transition-all">
+                <div class="h-48 overflow-hidden">
+                     <img src="https://images.unsplash.com/photo-1490481651871-388bdde11534?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Palette di Colori">
+                </div>
+                <div class="p-8 border-t-4 border-brand-olive">
+                    <div class="text-4xl text-brand-olive mb-4 font-serif opacity-50">06</div>
+                    <h3 class="text-xl font-bold mb-2 uppercase tracking-wide text-brand-brown" data-key="card_palette_title">Palette di Colori</h3>
+                    <p class="text-brand-brown/70 text-sm leading-relaxed" data-key="card_palette_desc">Colori desaturati e naturali che evocano la terra.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Instagram Feed Preview -->
+        <div class="mt-12 flex flex-col items-center reveal">
+            <div class="flex items-center gap-3 mb-10">
+                <svg class="w-6 h-6 text-brand-green" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                <div class="flex flex-col">
+                    <h3 class="text-xl text-brand-green font-serif italic" data-key="social_preview">@granivivi_official</h3>
+                </div>
+            </div>
+            
+            <div class="flex flex-col md:flex-row gap-6 w-full justify-center px-4">
+                <!-- 1. LEFT: ESPIGAS DE TRIGO SOBRE MADERA -->
+                <div class="w-full md:w-80 h-80 bg-gray-200 relative group overflow-hidden cursor-pointer shadow-lg rounded-sm">
+                    <img src="https://images.unsplash.com/photo-1543257580-7269da773bf5?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Espigas de trigo">
+                    <div class="absolute inset-0 bg-brand-green/90 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-center p-8 backdrop-blur-sm">
+                        <p class="font-serif italic text-lg" data-key="social_card_1">"Dalla terra al tuo benessere"</p>
+                    </div>
+                </div>
+                <!-- 2. CENTER: CHEF -->
+                <div class="w-full md:w-80 h-80 bg-gray-200 relative group overflow-hidden cursor-pointer shadow-lg rounded-sm">
+                    <img src="https://images.unsplash.com/photo-1577106263724-2c8e03bfe9cf?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Chef Italiano">
+                    <div class="absolute inset-0 bg-brand-green/90 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center text-white text-center p-8 backdrop-blur-sm">
+                        <p class="font-serif italic text-md leading-relaxed" data-key="social_card_2">"Ho scoperto il nuovo complemento perfetto per la mia cucina. Granivivi, 100% italiani."</p>
+                    </div>
+                </div>
+                <!-- 3. RIGHT: YOGA -->
+                <div class="w-full md:w-80 h-80 bg-gray-200 relative group overflow-hidden cursor-pointer shadow-lg rounded-sm">
+                    <img src="https://images.unsplash.com/photo-1552196563-55cd4e45efb3?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Yoga">
+                    <div class="absolute inset-0 bg-brand-green/90 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center text-white text-center p-8 backdrop-blur-sm">
+                        <p class="font-serif italic text-md leading-relaxed" data-key="social_card_3">"Il tuo momento, nutriente. La mia pratica quotidiana di yoga oggi si trasforma in un piccolo rituale di benessere."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BANNER DISPLAY (ESTILO HERO/PORTADA - L'ENERGIA DELLA TERRA) -->
+    <section id="display-banner" class="relative py-32 px-6 reveal overflow-hidden">
+         <!-- Fondo Estilo Portada (Paisaje natural/trigo similar) -->
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?q=80&w=1600&auto=format&fit=crop" class="w-full h-full object-cover opacity-90" alt="Banner Display Trigo">
+            <div class="absolute inset-0 bg-[#f3ede4]/40 mix-blend-overlay"></div>
+            <div class="absolute inset-0 bg-gradient-to-b from-[#f3ede4]/80 via-transparent to-[#f3ede4]/20"></div>
+        </div>
+        
+        <!-- Elementos decorativos (Parallax sutil) -->
+         <div class="absolute inset-0 z-0 parallax-layer" data-speed="1.2">
+             <svg class="absolute top-10 left-10 w-32 h-32 text-brand-green/10" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+        </div>
+
+        <div class="max-w-4xl mx-auto relative z-10 text-center">
+             <!-- Tarjeta estilo Glass/Editorial igual que el Hero -->
+            <div class="bg-white/60 backdrop-blur-md border border-white/50 p-12 md:p-16 rounded-sm shadow-2xl relative inline-block">
+                <div class="absolute inset-2 border border-brand-brown/10 pointer-events-none"></div>
+                
+                <span class="text-brand-rust uppercase tracking-brand-wide text-[10px] font-bold inline-block border-b border-brand-rust pb-1 mb-6">NUOVA COLLEZIONE</span>
+                
+                <h2 class="text-5xl md:text-7xl text-brand-green mb-6 leading-none font-serif" data-key="banner_title">L'Energia della Terra</h2>
+                
+                <p class="text-brand-brown/90 text-xl font-medium mb-8 max-w-lg mx-auto" data-key="banner_desc">Attiva il tuo corpo. Nutri la tua mente.</p>
+                
+                <button class="group inline-flex items-center justify-center gap-3 px-8 py-3 bg-brand-brown text-brand-beige overflow-hidden transition-all hover:bg-brand-green shadow-lg" data-key="banner_cta">
+                    <span class="uppercase tracking-widest text-xs font-bold">SCOPRI ORA</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-brand-brown text-brand-beige py-12 border-t border-brand-rust/30 reveal">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="text-center md:text-left">
+                <!-- LOGOTIPO FOOTER (PREPARADO PARA IMAGEN) -->
+                <a href="#" class="inline-block hover:opacity-80 transition-opacity mb-4">
+                    <!-- OPCIÓN 1: SVG RECREADO (Color Beige para fondo oscuro) -->
+                    <svg width="200" height="40" viewBox="0 0 200 40" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Granivivi Logo">
+                        <text x="0" y="30" font-family="'Lora', serif" font-weight="400" font-size="32" fill="#f3ede4" letter-spacing="0.02em">
+                            GRANĪVIVI
+                        </text>
+                    </svg>
+                    
+                    <!-- OPCIÓN 2: TU IMAGEN (DESCOMENTAR PARA USAR) -->
+                    <!-- Nota: Usa un logo en color claro/blanco para que se vea sobre el fondo marrón -->
+                    <!-- <img src="logo_white.png" alt="Granivivi Logo" style="height: 40px; width: auto;"> -->
+                </a>
+
+                <p class="text-xs tracking-widest opacity-60">PROGETTO ACCADEMICO - ART DIRECTION II</p>
+                <a href="#" class="block mt-4 text-brand-gold hover:underline font-bold tracking-widest">www.granivivi.it</a>
+            </div>
+            <div class="text-sm font-light opacity-70">
+                &copy; 2026 Alicia Pérez Sánchez. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const translations = {
+            it: {
+                nav_brand: "Il Brand",
+                nav_products: "Prodotti",
+                nav_offer: "Pack Benvenuto",
+                nav_art: "Art Direction",
+                nav_strategy: "Strategia",
+                hero_subtitle: "100% ITALIANO",
+                hero_claim: "Il tuo momento, nutriente.",
+                hero_desc: "Una pausa senza colpa. La fusione perfetta tra il piacere che desideri e l'equilibrio di cui hai bisogno.",
+                cta_discover: "Scopri il Manuale",
+                brand_archetype_title: "Il Saggio Sereno",
+                brand_archetype_desc: "Comunica con calma, autorevolezza e conoscenza. Risolve il conflitto tra piacere e salute offrendo una verità equilibrata.",
+                brand_section_title: "L'Identità Visiva",
+                brand_section_text: "L'identità di GraniVivi si costruisce su colori naturali che evocano la terra e la crescita. La tipografia combina la tradizione (Lora (Serif)) con la modernità (Montserrat (Sans)), riflettendo l'origine antica dei grani e il consumo contemporaneo.",
+                brand_logo_subtitle: "Variazione della lettera “I” e sviluppo dell’isotipo",
+                brand_logo_text_1: "Il logotipo GRANIVIVI è costruito a partire dalla tipografia Lora, scelta per il suo carattere elegante, equilibrato e contemporaneo, capace di esprimere i valori di qualità, naturalità e affidabilità del marchio. Le lettere sono state adattate e armonizzate per creare un insieme coerente e riconoscibile, mantenendo una forte leggibilità in tutti i contesti di utilizzo digitale.",
+                brand_logo_text_2: "Il claim “il tuo momento nutriente” utilizza la tipografia Montserrat, selezionata per il suo stile pulito e moderno, che dialoga in modo complementare con il logotipo principale e ne rafforza la chiarezza comunicativa.",
+                brand_logo_text_3: "Un ruolo centrale nel sistema visivo è affidato alla lettera “I” del logotipo, reinterpretata come elemento distintivo dell’identità del marchio. A partire dalla sua forma nasce l’isotipo, ottenuto integrando un segno grafico organico rappresentato da foglie, simbolo di naturalità, nutrimento e vitalità. Questa trasformazione consente di creare un legame diretto tra il linguaggio tipografico del logotipo e l’identità simbolica del marchio. L’isotipo mantiene una relazione proporzionale e formale con il logotipo, garantendo coerenza visiva e permettendone l’utilizzo sia in combinazione con il logotipo, sia come elemento autonomo nelle applicazioni di dimensioni ridotte.",
+                brand_color_title: "Sistema Cromatico",
+                brand_color_text: "I colori dell’identità visiva di GRANIVIVI sono parte integrante del linguaggio del marchio e contribuiscono a definirne il carattere, la riconoscibilità e il tono comunicativo. La palette cromatica è stata selezionata per esprimere valori di naturalità, equilibrio e autenticità, garantendo al tempo stesso una corretta applicazione nei diversi contesti digitali.",
+                brand_typo_title: "Sistema Tipografico",
+                brand_typo_lora: "La tipografia Lora Regular è utilizzata per il logotipo GRANIVIVI. Caratterizzata da uno stile elegante e strutturato, Lora conferisce al marchio un tono autorevole e autentico, in linea con i valori di qualità e naturalità. Il suo utilizzo è riservato al logotipo e ad applicazioni istituzionali selezionate.",
+                brand_typo_mont: "La tipografia Montserrat Regular è utilizzata per il claim “il tuo momento nutriente”. Dal carattere pulito e contemporaneo, Montserrat garantisce chiarezza e leggibilità, creando un dialogo equilibrato con la tipografia principale del logotipo.",
+                quote_brand: "\"Perché nutrirsi bene non dovrebbe significare rinunciare al gusto, né godere dovrebbe implicare colpa.\"",
+                
+                // PRODUCT
+                product_title: "I Nostri Snack",
+                product_desc: "Croccanti, leggeri e prodotti con antichi grani lombardi. Un ritorno alle origini in ogni morso.",
+                flavor_1_title: "Spinaci",
+                flavor_1_desc: "Grano antico e spinaci freschi. Un tocco di verde naturale.",
+                flavor_2_title: "Cacao",
+                flavor_2_desc: "Il tocco dolce-amaro del cacao puro. Energia autentica.",
+                flavor_3_title: "Zucca",
+                flavor_3_desc: "La dolcezza naturale della zucca mantovana.",
+                feat_cereals: "Cereali",
+                feat_sustain: "Sostenibile",
+                cert_link: "Vedi simboli e certificazioni",
+
+                // PROMO (IT)
+                promo_badge: "Pack Benvenuto",
+                promo_title: "Il Trio del Benessere",
+                promo_desc: "Non sai quale scegliere? Prova tutta la collezione. Spinaci, Cacao e Zucca in un unico pack per un'esperienza di gusto completa e nutriente.",
+                promo_shipping: "Spedizione Gratuita",
+                promo_label_price: "Prezzo Totale",
+                promo_cta: "Acquista il Pack",
+                promo_disclaimer: "*Offerta limitata fino ad esaurimento scorte",
+
+                art_title: "Il Progetto Artistico",
+                card_target_title: "Target",
+                card_target_desc: "Gli 'Equilibrati Consapevoli'. Persone che vivono in Lombardia, cercano qualità e sostenibilità, ma non vogliono una dieta punitiva.",
+                card_mood_title: "Visual Mood",
+                card_mood_desc: "Fotografia macro dei grani, luce naturale, texture tattili. Un'estetica pulita, editoriale e 'raw' che comunica onestà.",
+                card_social_title: "Social",
+                card_social_desc: "Collaborazioni con micro-influencer di Yoga e Cucina Sana. Focus su momenti di consumo reali e ricette semplici.",
+                card_tone_title: "Tono di Voce",
+                card_tone_desc: "Calmo, genuino ed evocativo. Si parlerà di 'momenti', 'equilibrio' e 'nutrimento'.",
+                card_shapes_title: "Forme",
+                card_shapes_desc: "Organiche e imperfette nel prodotto e pulite, con ampi spazi bianchi, nel design grafico per trasmettere calma.",
+                card_palette_title: "Palette di Colori",
+                card_palette_desc: "Colori desaturati e naturali che evocano la terra: beige avena, grigio lino, marrone integrale. Accenti di colore per le varianti: verde salvia, arancio bruciato, verde lime.",
+                
+                // SOCIAL
+                social_preview: "@granivivi_official",
+                social_card_1: "\"Dalla terra al tuo benessere\"",
+                social_card_2: "\"Ho scoperto il nuovo complemento perfetto per la mia cucina. Granivivi, 100% italiani.\"",
+                social_card_3: "\"Il tuo momento, nutriente. La mia pratica quotidiana di yoga oggi si trasforma in un piccolo rituale di benessere.\"",
+                
+                // BANNER DISPLAY
+                banner_title: "L'Energia della Terra",
+                banner_desc: "Attiva il tuo corpo. Nutri la tua mente.",
+                banner_cta: "SCOPRI ORA"
+            },
+            es: {
+                nav_brand: "La Marca",
+                nav_products: "Productos",
+                nav_offer: "Pack Bienvenida",
+                nav_art: "Dirección de Arte",
+                nav_strategy: "Estrategia",
+                hero_subtitle: "100% ITALIANO",
+                hero_claim: "Tu momento, nutritivo.",
+                hero_desc: "Una pausa sin culpa. La fusión perfecta entre el placer que deseas y el equilibrio que necesitas.",
+                cta_discover: "Descubre el Manual",
+                brand_archetype_title: "El Sabio Sereno",
+                brand_archetype_desc: "Comunica con calma, autoridad y conocimiento. Resuelve el conflicto entre placer y salud ofreciendo una verdad equilibrada.",
+                brand_section_title: "Identidad Visual",
+                brand_section_text: "La identidad de GraniVivi se construye sobre colores naturales que evocan la tierra y el crecimiento. La tipografía combina la tradición (Lora (Serif)) con la modernidad (Montserrat (Sans)), reflejando el origen antiguo de los granos y el consumo contemporaneo.",
+                brand_logo_subtitle: "Variación de la letra “I” y desarrollo del isotipo",
+                brand_logo_text_1: "El logotipo GRANIVIVI se construye a partir de la tipografía Lora, elegida por su carácter elegante, equilibrado y contemporáneo, capaz de expresar los valores de calidad, naturalidad y fiabilidad de la marca. Las letras han sido adaptadas y armonizadas para crear un conjunto coherente y reconocible, manteniendo una fuerte legibilidad en todos los contextos de uso digital.",
+                brand_logo_text_2: "El claim “tu momento nutritivo” utiliza la tipografía Montserrat, seleccionada por su estilo limpio y moderno, que dialoga de manera complementaria con el logotipo principal y refuerza su claridad comunicativa.",
+                brand_logo_text_3: "Un papel central en el sistema visual se confía a la letra “I” del logotipo, reinterpretada como elemento distintivo de la identidad de la marca. A partir de su forma nace el isotipo, obtenido integrando un signo gráfico orgánico representado por hojas, símbolo de naturalidad, nutrición y vitalidad. Esta transformación permite crear un vínculo directo entre el lenguaje tipográfico del logotipo y la identidad simbólica de la marca. El isotipo mantiene una relación proporcional y formal con el logotipo, garantizando coherencia visual y permitiendo su uso tanto en combinación con el logotipo como elemento autónomo en aplicaciones de tamaño reducido.",
+                brand_color_title: "Sistema Cromático",
+                brand_color_text: "Los colores de la identidad visual de GRANIVIVI son parte integrante del lenguaje de la marca y contribuyen a definir su carácter, reconocimiento y tono comunicativo. La paleta cromática ha sido seleccionada para expresar valores de naturalidad, equilibrio y autenticidad, garantizando al mismo tiempo una correcta aplicación en los diversos contextos digitales.",
+                brand_typo_title: "Sistema Tipográfico",
+                brand_typo_lora: "La tipografía Lora Regular se utiliza para el logotipo GRANIVIVI. Caracterizada por un estilo elegante y estructurado, Lora confiere a la marca un tono de autoridad y autenticidad, en línea con los valores de calidad y naturalidad. Su uso está reservado al logotipo y a aplicaciones institucionales seleccionadas.",
+                brand_typo_mont: "La tipografía Montserrat Regular se utiliza para el claim “tu momento nutritivo”. De carácter limpio y contemporáneo, Montserrat garantiza claridad y legibilidad, creando un diálogo equilibrado con la tipografía principal del logotipo.",
+                quote_brand: "\"Porque alimentarse bien no debería significar renunciar al sabor, ni disfrutar debería implicar culpa.\"",
+                
+                // PRODUCT
+                product_title: "Nuestros Snacks",
+                product_desc: "Crujientes, ligeros y producidos con antiguos granos lombardos. Un retorno a los orígenes en cada bocado.",
+                flavor_1_title: "Espinacas",
+                flavor_1_desc: "Trigo antiguo y espinacas frescas. Un toque de verde natural.",
+                flavor_2_title: "Cacao",
+                flavor_2_desc: "El toque agridulce del cacao puro. Energía auténtica.",
+                flavor_3_title: "Calabaza",
+                flavor_3_desc: "La dulzura natural de la calabaza.",
+                feat_cereals: "Cereales",
+                feat_sustain: "Sostenible",
+                cert_link: "Ver símbolos y certificaciones",
+
+                // PROMO (ES)
+                promo_badge: "Oferta Exclusiva",
+                promo_title: "El Trío del Bienestar",
+                promo_desc: "¿No sabes cuál elegir? Prueba toda la colección. Espinacas, Cacao y Calabaza en un único pack para una experiencia de sabor completa y nutritiva.",
+                promo_shipping: "Envío Gratuito",
+                promo_label_price: "Precio Total",
+                promo_cta: "Comprar el Pack",
+                promo_disclaimer: "*Oferta limitada hasta fin de existencias",
+
+                art_title: "El Proyecto Artístico",
+                card_target_title: "Target",
+                card_target_desc: "Los 'Equilibrados Conscientes'. Personas que viven en Lombardía, buscan calidad y sostenibilidad, pero no quieren una dieta punitiva.",
+                card_mood_title: "Visual Mood",
+                card_mood_desc: "Fotografía macro de granos, luz natural, texturas táctiles. Una estética limpia, editorial y 'cruda' que comunica honestidad.",
+                card_social_title: "Social",
+                card_social_desc: "Colaboraciones con micro-influencers de Yoga y Cocina Sana. Foco en momentos de consumo reales y recetas simples.",
+                card_tone_title: "Tono de Voz",
+                card_tone_desc: "Calmado, genuino y evocador. Se hablará de 'momentos', 'equilibrio' y 'nutrición'.",
+                card_shapes_title: "Formas",
+                card_shapes_desc: "Orgánicas e imperfectas en el producto y limpias, con amplios espacios en blanco, en el diseño gráfico para transmitir calma.",
+                card_palette_title: "Paleta de Colores",
+                card_palette_desc: "Colores desaturados y naturales que evocan la tierra: beige avena, gris lino, marrón integral. Acentos de color para las variantes: verde salvia, naranja quemado, verde lima.",
+                
+                // SOCIAL
+                social_preview: "@granivivi_official",
+                social_card_1: "\"De la tierra a tu bienestar\"",
+                social_card_2: "\"He descubierto el nuevo complemento perfecto para mi cocina. Granivivi, 100% italianos.\"",
+                social_card_3: "\"Tu momento, nutritivo. Mi práctica diaria de yoga hoy se transforma en un pequeño ritual de bienestar.\"",
+                
+                // BANNER DISPLAY
+                banner_title: "LA ENERGÍA<br>DE LA TIERRA",
+                banner_desc: "Activa tu cuerpo. Nutre tu mente.",
+                banner_cta: "DESCUBRE MÁS"
+            }
+        };
+
+        let currentLang = 'es'; // START IN SPANISH BY DEFAULT
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'it' ? 'es' : 'it';
+            document.getElementById('lang-display').textContent = currentLang === 'it' ? 'ES' : 'IT';
+            
+            document.querySelectorAll('[data-key]').forEach(elem => {
+                const key = elem.getAttribute('data-key');
+                if(translations[currentLang][key]) {
+                    elem.style.opacity = 0;
+                    setTimeout(() => {
+                        if (translations[currentLang][key].includes('<')) {
+                            elem.innerHTML = translations[currentLang][key];
+                        } else {
+                            elem.textContent = translations[currentLang][key];
+                        }
+                        elem.style.opacity = 1;
+                    }, 200);
+                }
+            });
+        }
+
+        function changeProduct(flavor, element) {
+            const displayImg = document.getElementById('product-display');
+            let newSrc = '';
+            switch(flavor) {
+                case 'spinaci': newSrc = 'packaging_spinaci.jpg'; break;
+                case 'cacao': newSrc = 'packaging_cacao.jpg'; break;
+                case 'zucca': newSrc = 'packaging_zucca.jpg'; break;
+                case 'all': default: newSrc = 'packaging_all.jpg'; break;
+            }
+            displayImg.style.opacity = 0;
+            setTimeout(() => {
+                displayImg.src = newSrc;
+                displayImg.onerror = function() { this.src = 'https://via.placeholder.com/600x800.png?text=' + newSrc; };
+                displayImg.style.opacity = 1;
+            }, 300);
+
+            if (element) {
+                document.querySelectorAll('.flavor-item').forEach(el => { el.classList.remove('active'); el.classList.remove('border-brand-brown'); el.classList.add('border-transparent'); });
+                element.classList.add('active'); element.classList.remove('border-transparent');
+                if(flavor === 'spinaci') element.style.borderLeftColor = '#006633';
+                else if(flavor === 'cacao') element.style.borderLeftColor = '#3c1c10';
+                else if(flavor === 'zucca') element.style.borderLeftColor = '#b35238';
+            } else {
+                document.querySelectorAll('.flavor-item').forEach(el => { el.classList.remove('active'); el.style.borderLeftColor = 'transparent'; });
+            }
+        }
+
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 150;
+                if (elementTop < windowHeight - elementVisible) { reveals[i].classList.add("active"); }
+            }
+        }
+        window.addEventListener("scroll", reveal);
+        reveal();
+
+        // --- SCROLL SUAVE PARA LINKS ANCLA ---
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) { targetElement.scrollIntoView({ behavior: 'smooth' }); }
+            });
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            const layers = document.querySelectorAll('.parallax-layer');
+            const x = (window.innerWidth - e.pageX * 2) / 100;
+            const y = (window.innerHeight - e.pageY * 2) / 100;
+            layers.forEach(layer => {
+                const speed = layer.getAttribute('data-speed');
+                const xPos = x * speed; const yPos = y * speed;
+                layer.style.transform = `translateX(${xPos}px) translateY(${yPos}px)`;
+            });
+        });
+
+        document.querySelectorAll('[data-key]').forEach(el => el.style.transition = 'opacity 0.3s');
+        
+        toggleLanguage(); 
+
+    </script>
+</body>
+</html>
